@@ -38,9 +38,11 @@ android {
     buildFeatures {
         compose true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -49,6 +51,7 @@ android {
 }
 
 dependencies {
+
 
     def nav_version = "2.5.3"
     def retrofit_version = "2.9.0"
