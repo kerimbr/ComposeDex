@@ -1,7 +1,7 @@
-package com.kerimbr.compokedex.repository
+package com.kerimbr.compokedex.domain.repository
 
 import com.kerimbr.compokedex.core.utils.Resource
-import com.kerimbr.compokedex.data.remote.responses.PokeApi
+import com.kerimbr.compokedex.data.remote.PokeApi
 import com.kerimbr.compokedex.data.remote.responses.pokemon.PokemonResponse
 import com.kerimbr.compokedex.data.remote.responses.pokemon_list.PokemonListResponse
 import dagger.hilt.android.scopes.ActivityScoped

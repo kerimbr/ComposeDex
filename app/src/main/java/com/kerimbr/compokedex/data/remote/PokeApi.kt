@@ -1,4 +1,4 @@
-package com.kerimbr.compokedex.data.remote.responses
+package com.kerimbr.compokedex.data.remote
 
 import com.kerimbr.compokedex.data.remote.responses.pokemon.PokemonResponse
 import com.kerimbr.compokedex.data.remote.responses.pokemon_list.PokemonListResponse
