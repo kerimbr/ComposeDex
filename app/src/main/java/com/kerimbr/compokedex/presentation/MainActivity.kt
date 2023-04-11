@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kerimbr.compokedex.presentation.pokemon_list.PokemonListScreen
 import com.kerimbr.compokedex.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     composable(ScreenDestinations.PokemonListScreen.route) {
-
+                        PokemonListScreen(navController = navController)
                     }
 
                     composable(

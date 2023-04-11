@@ -1,6 +1,7 @@
 package com.kerimbr.compokedex.di
 
 import com.kerimbr.compokedex.data.remote.PokeApi
+import com.kerimbr.compokedex.data.repository.PokemonRepositoryImpl
 import com.kerimbr.compokedex.domain.repository.PokemonRepository
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,7 @@ object AppModule {
     @Provides
     fun providePokemonRepository(
         api: PokeApi
-    ): PokemonRepository = PokemonRepository(api)
+    ): PokemonRepository = PokemonRepositoryImpl(api)
 
 
 }

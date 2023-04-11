@@ -17,7 +17,7 @@ data class PokemonResponse(
     @SerializedName("held_items")
     val heldItems: List<HeldItem>?,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int,
     @SerializedName("is_default")
     val isDefault: Boolean?,
     @SerializedName("location_area_encounters")
@@ -25,7 +25,7 @@ data class PokemonResponse(
     @SerializedName("moves")
     val moves: List<Move>?,
     @SerializedName("name")
-    val name: String?,
+    val name: String,
     @SerializedName("order")
     val order: Int?,
     @SerializedName("past_types")
