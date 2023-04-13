@@ -1,20 +1,18 @@
 package com.kerimbr.compokedex.presentation.pokemon_list
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kerimbr.compokedex.core.enums.PokedexListState
+import com.kerimbr.compokedex.domain.models.PokedexListEntry
 import com.kerimbr.compokedex.presentation.pokemon_list.components.PokemonGridList
 import com.kerimbr.compokedex.presentation.pokemon_list.components.PokemonListSearchBar
 import com.kerimbr.compokedex.presentation.pokemon_list.components.PokemonListSubTitle
@@ -30,114 +28,98 @@ fun PokemonListScreen(
     val lazyListState = rememberLazyListState()
 
 
-    Scaffold(
-        content = {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = lazyListState,
-            ) {
-
-                item {
-                    PokemonListTitle(
-                        modifier = Modifier
-                            .padding(
-                                top = it.calculateTopPadding().plus(16.dp),
-                                start = 16.dp,
-                                end = 16.dp
-                            )
-                    )
-                }
-
-                item {
-                    PokemonListSubTitle(
-                        modifier = Modifier
-                            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
-
-
-                item {
-                    PokemonListSearchBar(
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                pokemonListBody(
-                    navController = navController,
-                    state = viewModel.state.value,
-                )
-
-            }
+    val shouldStartPaginate: Boolean by remember {
+        derivedStateOf {
+            viewModel.canPaginate && lazyListState.isScrolledToEnd()
         }
-    )
-}
+    }
 
-    fun LazyListScope.pokemonListBody(
-        navController: NavController,
-        state: PokemonListState,
+    LaunchedEffect(key1 = shouldStartPaginate) {
+        if (shouldStartPaginate && viewModel.pokedexListState == PokedexListState.IDLE) {
+            print("PAGINATE")
+            viewModel.loadPokemonWithPagination()
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = lazyListState,
     ) {
 
-        when {
-            state.isLoading -> {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-            state.error.isNotBlank() -> {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = state.error)
-                    }
-                }
-            }
-            else -> {
+        item {
+            PokemonListTitle(
+                modifier = Modifier
+                    .padding(
+                        top = 32.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+            )
 
-                if (state.pokemonList.size % 2 == 0){
-                    items(
-                        count = state.pokemonList.size / 2,
-                        key = { index -> state.pokemonList[index * 2].imageUrl }
-                    ) { index ->
-                        PokemonGridList(
-                            pokemonList = listOf(state.pokemonList[index * 2], state.pokemonList[index * 2 + 1]),
-                            navController = navController,
-                        )
-                    }
-                }else{
-                    items(
-                        count = state.pokemonList.size / 2,
-                        key = { index -> state.pokemonList[index * 2].imageUrl }
-                    ) { index ->
-                        PokemonGridList(
-                            pokemonList = listOf(state.pokemonList[index * 2], state.pokemonList[index * 2 + 1]),
-                            navController = navController,
-                        )
-                    }
-                    item {
-                        PokemonGridList(
-                            pokemonList = listOf(state.pokemonList.last()),
-                            navController = navController,
-                        )
-                    }
+            PokemonListSubTitle(
+                modifier = Modifier
+                    .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+            )
+
+            PokemonListSearchBar(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        val gridItems: List<List<PokedexListEntry>> = viewModel.pokedexList.chunked(2)
+
+        items(
+            items = gridItems,
+            key = { i -> i.hashCode() }
+        ){
+            PokemonGridList(
+                pokemonList = it,
+                navController = navController,
+            )
+        }
+
+        item(
+            key = viewModel.pokedexListState
+        ){
+            when (viewModel.pokedexListState) {
+                PokedexListState.FIRST_LOADING -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+                PokedexListState.PAGINATING -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+                PokedexListState.END_OF_LIST -> {
+                    Text(
+                        text = "End of list",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+                else -> {
+                    // for reCalculate shouldStartPaginate
+                    Text(text = shouldStartPaginate.toString())
                 }
             }
         }
 
     }
+}
+
+fun LazyListState.isScrolledToEnd(): Boolean {
+    return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+}
+
