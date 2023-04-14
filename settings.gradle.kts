@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         google()
@@ -13,4 +14,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Compokedex"
-include ':app'
+include ("app")
