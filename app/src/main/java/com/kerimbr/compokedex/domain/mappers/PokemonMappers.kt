@@ -26,5 +26,6 @@ fun PokemonResponse.toPokemonDetails(): PokemonDetails = PokemonDetails(
     stats = stats ?: emptyList(),
     moves = moves ?: emptyList(),
     heldItems = heldItems ?: emptyList(),
-    gameIndices = gameIndices ?: emptyList()
+    gameIndices = gameIndices ?: emptyList(),
+    sprites = sprites,
 )

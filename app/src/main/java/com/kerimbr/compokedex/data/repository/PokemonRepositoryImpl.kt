@@ -1,6 +1,5 @@
 package com.kerimbr.compokedex.data.repository
 
-import com.kerimbr.compokedex.core.utils.Resource
 import com.kerimbr.compokedex.data.remote.PokeApi
 import com.kerimbr.compokedex.data.remote.responses.pokemon.PokemonResponse
 import com.kerimbr.compokedex.data.remote.responses.pokemon_list.PokemonListResponse
@@ -15,7 +14,7 @@ class PokemonRepositoryImpl @Inject constructor(
         return pokeApi.getPokemonList(limit, offset)
     }
 
-    override suspend fun getPokemonInfo(pokemonName: String): PokemonResponse {
-        return pokeApi.getPokemonInfo(pokemonName)
+    override suspend fun getPokemonInfo(pokemonNumber: Int): PokemonResponse {
+        return pokeApi.getPokemonInfo(pokemonNumber)
     }
 }

@@ -17,4 +17,5 @@ data class PokemonDetails(
     val moves: List<Move>?,
     val heldItems: List<HeldItem>?,
     val gameIndices: List<GameIndice>?,
+    val sprites: Sprites?
 )

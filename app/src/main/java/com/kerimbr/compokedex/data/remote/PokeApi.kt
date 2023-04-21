@@ -3,6 +3,7 @@ package com.kerimbr.compokedex.data.remote
 import com.kerimbr.compokedex.data.remote.responses.pokemon.PokemonResponse
 import com.kerimbr.compokedex.data.remote.responses.pokemon_list.PokemonListResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PokeApi {
@@ -14,9 +15,9 @@ interface PokeApi {
     ): PokemonListResponse
 
 
-    @GET("pokemon/{name}")
+    @GET("pokemon/{id}")
     suspend fun getPokemonInfo(
-        @Query("name") name: String
+        @Path("id") id: Int
     ): PokemonResponse
 
 }

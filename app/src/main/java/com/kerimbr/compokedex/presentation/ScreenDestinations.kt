@@ -15,20 +15,28 @@ sealed class ScreenDestinations(
     object PokemonDetailScreen : ScreenDestinations(
         route = "pokemon_detail_screen",
         arguments = listOf(
-            navArgument("dominantColor") {
+            navArgument("number") {
                 type = NavType.IntType
-            },
-            navArgument("pokemonName") {
-                type = NavType.StringType
             }
         )
     )
 
-    fun getRouteWithArgs(vararg args: String): String {
+    // xxx/{arg1}/{arg2}
+    fun generateRouteWithArgs(vararg args: String): String {
         return buildString {
             append(route)
             args.forEach { arg ->
                 append("/{$arg}")
+            }
+        }
+    }
+
+    // xxx/arg1/arg2
+    fun getRouteWithArgs(vararg args: Pair<String, Any>): String {
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/${arg.second}")
             }
         }
     }

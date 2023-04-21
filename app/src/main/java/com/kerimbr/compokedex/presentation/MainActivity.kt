@@ -3,14 +3,11 @@ package com.kerimbr.compokedex.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kerimbr.compokedex.presentation.pokemon_details.PokemonDetailScreen
 import com.kerimbr.compokedex.presentation.pokemon_list.PokemonListScreen
 import com.kerimbr.compokedex.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,21 +29,20 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(
-                        ScreenDestinations.PokemonDetailScreen.getRouteWithArgs(
-                            "dominantColor",
-                            "pokemonName"
+                        ScreenDestinations.PokemonDetailScreen.generateRouteWithArgs(
+                            "number"
                         ),
                         arguments = ScreenDestinations.PokemonDetailScreen.arguments!!
                     ) {
-                        val dominantColor = remember{
-                            val color = it.arguments?.getInt("dominantColor")
-                            color?.let { Color(it) }?: Color.White
+
+                        val number: Int = remember{
+                            it.arguments!!.getInt("number")
                         }
 
-                        val pokemonName = remember{
-                            it.arguments?.getString("pokemonName")
-                        }
-
+                        PokemonDetailScreen(
+                            navController = navController,
+                            number = number
+                        )
 
                     }
 
