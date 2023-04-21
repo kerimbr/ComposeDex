@@ -11,11 +11,11 @@ import javax.inject.Inject
 class GetPokemonDetailsUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ){
-    suspend operator fun invoke(pokemonName: String): Flow<Resource<PokemonDetails>> {
+    suspend operator fun invoke(pokemonNumber: Int): Flow<Resource<PokemonDetails>> {
         return flow {
             emit(Resource.Loading())
             try {
-                val pokemonDetailsResponse = pokemonRepository.getPokemonInfo(pokemonName)
+                val pokemonDetailsResponse = pokemonRepository.getPokemonInfo(pokemonNumber)
                 val pokemon: PokemonDetails = pokemonDetailsResponse.toPokemonDetails()
                 emit(Resource.Success(pokemon))
             } catch (e: Exception) {

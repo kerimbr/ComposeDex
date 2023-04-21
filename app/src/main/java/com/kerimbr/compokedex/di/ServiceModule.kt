@@ -45,7 +45,7 @@ object ServiceModule {
         }
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
             builder.addInterceptor(loggingInterceptor)
         }
         return builder.build()

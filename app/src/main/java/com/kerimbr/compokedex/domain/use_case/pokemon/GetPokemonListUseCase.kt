@@ -8,6 +8,7 @@ import com.kerimbr.compokedex.domain.models.Pokemon
 import com.kerimbr.compokedex.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.*
 import javax.inject.Inject
 
 class GetPokemonListUseCase @Inject constructor(
@@ -33,7 +34,11 @@ class GetPokemonListUseCase @Inject constructor(
                     val imageUrl = generatePokemonArtworkUrl(number.toInt())
 
                     PokedexListEntry(
-                        pokemonName = entry.name,
+                        pokemonName = entry.name.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.US
+                            ) else it.toString()
+                        },
                         imageUrl = imageUrl,
                         number = number.toInt()
                     )

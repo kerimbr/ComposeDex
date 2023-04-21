@@ -1,14 +1,12 @@
 package com.kerimbr.compokedex.presentation.pokemon_list
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.palette.graphics.Palette
 import com.kerimbr.compokedex.core.constants.AppConstants
 import com.kerimbr.compokedex.core.enums.PokedexListState
 import com.kerimbr.compokedex.core.utils.Resource
@@ -82,17 +80,6 @@ class PokemonListViewModel @Inject constructor(
                 }
 
 
-            }
-        }
-    }
-
-    fun calculateDominantColor(drawable: Drawable, onFinished: (Color) -> Unit) {
-        val bitmap = (drawable as BitmapDrawable).bitmap
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        Palette.from(bitmap).generate { palette ->
-            palette?.dominantSwatch?.rgb?.let { color ->
-                onFinished(Color(color))
             }
         }
     }
