@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kerimbr.compokedex.domain.models.PokemonDetails
 import com.kerimbr.compokedex.presentation.pokemon_details.components.PokemonDetailContent
+import com.kerimbr.compokedex.presentation.pokemon_details.components.PokemonDetailShimmer
 import timber.log.Timber
 
 @Composable
@@ -58,9 +59,7 @@ private fun LoadingDetails() {
             .fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(
-            strokeCap = StrokeCap.Round
-        )
+        PokemonDetailShimmer()
     }
 }
 
