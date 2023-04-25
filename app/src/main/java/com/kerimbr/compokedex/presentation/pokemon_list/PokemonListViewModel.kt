@@ -22,15 +22,38 @@ class PokemonListViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val pokedexList: SnapshotStateList<PokedexListEntry> = mutableStateListOf()
+    private val pokedexList: SnapshotStateList<PokedexListEntry> = mutableStateListOf()
 
     private var _page: Int by mutableStateOf(0)
     var canPaginate: Boolean by mutableStateOf(false)
     var pokedexListState: PokedexListState by mutableStateOf(PokedexListState.IDLE)
 
+    private var searchText: String by mutableStateOf("")
+
+    val filteredPokedexList: List<PokedexListEntry>
+        get() {
+            return pokedexList.filter {
+                it.pokemonName.contains(searchText, ignoreCase = true)
+                        || it.number.toString() == searchText
+            }
+        }
+
 
     init {
         loadPokemonWithPagination()
+    }
+
+    fun onSearch(searchText: String) {
+        if (this.searchText == searchText) return
+        pokedexListState = if (searchText.isEmpty()) {
+            canPaginate = true
+            PokedexListState.IDLE
+        }
+        else {
+            canPaginate = false
+            PokedexListState.SEARCHED
+        }
+        this.searchText = searchText
     }
 
     fun loadPokemonWithPagination() {
@@ -45,14 +68,15 @@ class PokemonListViewModel @Inject constructor(
                 getPokemonListUseCase(
                     limit = AppConstants.LIMIT,
                     offset = _page * AppConstants.LIMIT,
-                ).collect{
+                ).collect {
 
-                    when(it) {
+                    when (it) {
                         is Resource.Loading -> {
                             pokedexListState =
                                 if (_page == 0) PokedexListState.FIRST_LOADING
                                 else PokedexListState.PAGINATING
                         }
+
                         is Resource.Success -> {
 
                             if (it.data!!.isEmpty()) {
@@ -72,6 +96,7 @@ class PokemonListViewModel @Inject constructor(
                             pokedexListState = PokedexListState.IDLE
                             _page++
                         }
+
                         is Resource.Error -> {
                             pokedexListState = PokedexListState.ERROR
                         }

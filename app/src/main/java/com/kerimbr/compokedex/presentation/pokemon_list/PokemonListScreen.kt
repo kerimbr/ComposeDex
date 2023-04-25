@@ -26,7 +26,7 @@ fun PokemonListScreen(
     viewModel: PokemonListViewModel = hiltViewModel()
 ) {
 
-    val lazyListState = rememberLazyListState()
+    val lazyListState: LazyListState = rememberLazyListState()
 
 
     val shouldStartPaginate: Boolean by remember {
@@ -35,9 +35,9 @@ fun PokemonListScreen(
         }
     }
 
-    LaunchedEffect(key1 = shouldStartPaginate) {
+
+    LaunchedEffect(shouldStartPaginate) {
         if (shouldStartPaginate && viewModel.pokedexListState == PokedexListState.IDLE) {
-            print("PAGINATE")
             viewModel.loadPokemonWithPagination()
         }
     }
@@ -67,19 +67,20 @@ fun PokemonListScreen(
 
                 PokemonListSearchBar(
                     modifier = Modifier
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    onSearch = viewModel::onSearch
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            val gridItems: List<List<PokedexListEntry>> = viewModel.pokedexList.chunked(2)
+            val gridItems: List<List<PokedexListEntry>> = viewModel.filteredPokedexList.chunked(2)
 
             items(
                 items = gridItems,
                 key = { i -> i.hashCode() }
-            ){
+            ){list: List<PokedexListEntry> ->
                 PokemonGridRow(
-                    pokemonList = it,
+                    pokemonList = list,
                     navController = navController,
                 )
             }
@@ -116,8 +117,14 @@ fun PokemonListScreen(
                         )
                     }
                     else -> {
-                        // for reCalculate shouldStartPaginate
-                        Text(text = shouldStartPaginate.toString())
+                        Text(
+                            text = if (shouldStartPaginate) "Loading..."
+                            else "End of list",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .wrapContentWidth(Alignment.CenterHorizontally)
+                        )
                     }
                 }
             }
