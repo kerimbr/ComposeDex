@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -103,8 +106,8 @@ fun PokemonContentHeader(
                     contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 ),
             ) {
-                Image(
-                    imageVector = Icons.Rounded.ChevronLeft,
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = null,
                 )
             }
