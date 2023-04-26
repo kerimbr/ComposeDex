@@ -54,7 +54,7 @@ fun PokemonListScreen(
                 PokemonListTitle(
                     modifier = Modifier
                         .padding(
-                            top = 32.dp,
+                            top = 16.dp,
                             start = 16.dp,
                             end = 16.dp
                         )
